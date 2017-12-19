@@ -1,0 +1,27 @@
+<div class="container">
+    <h5>Add Task</h5>
+    <form (ngSubmit)="TaskData()" #taskForm="ngForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" required #taskName>
+      </div>
+
+      <div class="form-group">
+        <label for="alterEgo">Body</label>
+        <input type="text" class="form-control" id="body" #taskBody>
+      </div>
+
+      <button type="submit" class="btn btn-success">Submit</button>
+
+    </form>
+
+<!--     <div>
+  <label>Task name:
+    <input #taskName type="text" class="form-control" id="name" required>
+
+  </label>
+  <button (click)="add(taskName.value); taskName.value=''" class="btn btn-success">
+    add
+  </button>
+</div> -->
+</div>
