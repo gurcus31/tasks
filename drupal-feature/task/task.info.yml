@@ -1,0 +1,16 @@
+name: task
+description: 'Provides task content type and related configuration. '
+type: module
+core: 8.x
+dependencies:
+  - basic_auth
+  - field
+  - hal
+  - menu_ui
+  - node
+  - path
+  - rest
+  - serialization
+  - text
+  - user
+  - views
