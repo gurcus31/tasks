@@ -5,10 +5,12 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Task } from './task';
-//import { TASKS } from './mock-task';
 
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 
 // The heroes web API expects a special header in HTTP save requests. 
 // That header is in the httpOption constant defined in the HeroService.
@@ -24,11 +26,20 @@ const httpHaljson = {
 
 @Injectable()
 export class TaskService {
-  private mainUrl = 'http://drupal.dd:8083'
+  public mainUrl = 'http://drupal.dd:8083'
+  
+  private noId = new BehaviorSubject<number>(0);
+  defaultId = this.noId.asObservable();
 
 constructor(
   private http: HttpClient,
   private messageService: MessageService) { }
+
+  newId(urlId: number) {
+    this.noId.next(urlId);
+    // console.log (urlId);
+  }
+
 
   	getTasks(): Observable<Task[]> {
       const url = `${this.mainUrl}/tasks`;
@@ -63,7 +74,10 @@ getTask(id: number): Observable<Task> {
 addTask (task: Task): Observable<Task> {
   const url = `${this.mainUrl}/entity/node`;  
   // console.log(JSON.stringify(task));    
-  return this.http.post(url, task, httpHaljson).pipe(    
+  const postReturn = this.http.post(url, task, httpHaljson);
+  // console.log(JSON.stringify(postReturn));  
+  return postReturn 
+  .pipe( 
     tap((task: Task) => this.log(`added task w/ id=${task.id}`)),
     catchError(this.handleError<Task>('addtask'))
   );

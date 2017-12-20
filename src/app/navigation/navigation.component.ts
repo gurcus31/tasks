@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { 
+  Component, 
+  OnInit, 
+  // ChangeDetectorRef,
+  Input
+   } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
 import { Task } from '../task';
-import { RouterModule } from '@angular/router';
-
+import { RouterModule, ActivatedRoute, Router} from '@angular/router';
 import { AppComponent } from '../app.component';
-
-//call fake tasks
- // import { TASKS } from '../mock-task';
-
-//call the service
 import { TaskService} from '../task.service';
-
-
+import { ViewTaskComponent } from '../view-task/view-task.component';
 
 @Component({
   selector: 'app-navigation',
@@ -19,47 +17,81 @@ import { TaskService} from '../task.service';
   styleUrls: ['./navigation.component.css']
 })
 
-
 export class NavigationComponent implements OnInit {
-//	tasks = TASKS;
 tasks: Task[];
 form: FormGroup;
 payLoad = '';
-  constructor(private taskService: TaskService) { }
+urlId: number;
+
+  constructor(
+    private taskService: TaskService, 
+    private route: ActivatedRoute, 
+    //here
+    // private cdRef: ChangeDetectorRef,
+
+    private router: Router
+    ) { }
+
   ngOnInit() {
     this.getTasks();
-  }
-  	getTasks(): void {
+    }
+
+  // ngAfterViewChecked() { 
+  //       this.cdRef.detectChanges();
+  // }   
+  	
+
+    getTasks(): void {
   		this.taskService.getTasks()
   			.subscribe(Tasks => this.tasks = Tasks);
   	}  
 
+
     onSubmit(name: string, body:string): void {
-   let task: any = {
+    name = name.trim();
+    if (!name) { return; }
+    
+    let task: any = {
        _links: null,
        type: null,
        title: null,
-       body: null     
+       body: null  
     };
-    
-    task._links = {type: {"href": "http://drupal.dd:8083/rest/type/node/task"} };
+
+    const url = `${this.taskService.mainUrl}/rest/type/node/task`;
+    task._links = {type: {"href":url}};
     task.type = {target_id: "task"};
     task.title = {value: name};
     task.body = { "": body};
-      
+    // console.log(JSON.stringify(task));    
       this.taskService.addTask(task)
         .subscribe(task => {
-          this.tasks.push(task);
-          // console.log(JSON.stringify(task));    
-        });
+          // console.log(JSON.stringify(this.tasks));
+          this.getTasks();
+         });
+
     }
 
-   
     delete(task: Task): void {
       this.tasks = this.tasks.filter(h => h !== task);
-      this.taskService.deleteTask(task).subscribe();
+      //we save the id , cuz after the delete function, we  gonna lose it
+      const oldId = task.id;
+      this.taskService.deleteTask(task)
+        .subscribe(task => {
+//we call the defaultId function from task.service. 
+          this.taskService.defaultId
+//here we are subscribed to the urlId, which give us the id from the view task         
+            .subscribe(urlId => { 
+              this.urlId = urlId ; 
+              // console.log (this.urlId); 
+              // console.log (oldId);
+                  if (oldId == urlId ) {
+                    // Location.call('/home');
+                    this.router.navigate(['/home']);
+                  }  
+            })
+        })
     }
-
 }
-
-
+// const nid = +this.route.snapshot.paramMap.get('id')      
+// console.log(JSON.stringify(task));
