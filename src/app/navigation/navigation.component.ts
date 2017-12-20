@@ -1,7 +1,7 @@
 import { 
   Component, 
   OnInit, 
-  // ChangeDetectorRef,
+  ChangeDetectorRef,
   Input
    } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
@@ -26,9 +26,7 @@ urlId: number;
   constructor(
     private taskService: TaskService, 
     private route: ActivatedRoute, 
-    //here
-    // private cdRef: ChangeDetectorRef,
-
+    private cdRef: ChangeDetectorRef,
     private router: Router
     ) { }
 
@@ -71,7 +69,6 @@ urlId: number;
          });
 
     }
-
     delete(task: Task): void {
       this.tasks = this.tasks.filter(h => h !== task);
       //we save the id , cuz after the delete function, we  gonna lose it
@@ -83,8 +80,6 @@ urlId: number;
 //here we are subscribed to the urlId, which give us the id from the view task         
             .subscribe(urlId => { 
               this.urlId = urlId ; 
-              // console.log (this.urlId); 
-              // console.log (oldId);
                   if (oldId == urlId ) {
                     // Location.call('/home');
                     this.router.navigate(['/home']);
@@ -93,5 +88,4 @@ urlId: number;
         })
     }
 }
-// const nid = +this.route.snapshot.paramMap.get('id')      
-// console.log(JSON.stringify(task));
+

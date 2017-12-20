@@ -1,7 +1,7 @@
 import { 
   Component, 
   OnInit, 
-  // ChangeDetectorRef,
+  ChangeDetectorRef,
   Input
    } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +9,8 @@ import { Location } from '@angular/common';
 
 import { Task } from '../task';
 import { TaskService } from '../task.service';
+import { NavigationComponent } from '../navigation/navigation.component'
+
 @Component({
   selector: 'app-view-task',
   templateUrl: './view-task.component.html',
@@ -26,7 +28,8 @@ export class ViewTaskComponent implements OnInit  {
 	constructor(
 	  private route: ActivatedRoute,
 	  private taskService: TaskService,
-	  // private cdRef: ChangeDetectorRef,
+	  private Ref: ChangeDetectorRef,
+    private NavigationComponent: NavigationComponent;
     private location: Location
 	) {}
 
@@ -53,9 +56,7 @@ export class ViewTaskComponent implements OnInit  {
   goBack(): void {
     this.location.back();
   }
-  // refresh() {
-  //   this.cdRef.detectChanges();
-  // }
+
   save(name: string, body:string): void {
    	// let tasks: any = {_links: null}; tasks._links = {type: ...};
     let task: any = {
@@ -75,7 +76,10 @@ export class ViewTaskComponent implements OnInit  {
       
         this.taskService.updateTask(task, id)
               .subscribe(
-                  // this.refresh();
+                  // this.Ref.detach();
+                  // setInterval(() => {
+                  //   this.Ref.detectChanges();
+                  // }, 5000);
                 );
    }
 
