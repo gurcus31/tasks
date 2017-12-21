@@ -16,7 +16,6 @@ import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 import {MatTabsModule, MatInputModule, MatIconModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddTaskComponent } from './add-task/add-task.component';
 
 
 
@@ -26,8 +25,7 @@ import { AddTaskComponent } from './add-task/add-task.component';
     NavigationComponent,
     ViewTaskComponent,
     MessagesComponent,
-    MainViewComponent,
-    AddTaskComponent
+    MainViewComponent
   ],
   imports: [
     BrowserModule,
