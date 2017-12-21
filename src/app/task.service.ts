@@ -31,24 +31,60 @@ export class TaskService {
   private noId = new BehaviorSubject<number>(0);
   defaultId = this.noId.asObservable();
 
+  // public taskList = new BehaviorSubject ([]);
+  // firstList = this.taskList.asObservable();
+
+  private tasks = new BehaviorSubject([]);
+  private taskList: Task[];
+
+
 constructor(
   private http: HttpClient,
   private messageService: MessageService) { }
 
-  newId(urlId: number) {
+//this newId function is getting the ID from the url of the view-task component. 
+  newId(urlId) {
     this.noId.next(urlId);
     // console.log (urlId);
   }
+//this taskCall function is filling the taskList array with an updated service. 
+  // tasksCall(newTasks){
+  //   this.taskList.next(newTasks);
+  // }
+  getTasks() {
+      if (!this.taskList || this.taskList.length === 0) {
+          this.initializeTasks();
+      }
+
+      return this.tasks.asObservable();
+  }
 
 
-  	getTasks(): Observable<Task[]> {
+  	initializeTasks(){
       const url = `${this.mainUrl}/tasks`;
   	  return this.http.get<Task[]>(url)
-	    .pipe(
-	    tap(tasks => this.log(`fetched tasks`)),	
-      	catchError(this.handleError('getTasks', []))
-    	);  	  
+            .subscribe (tasks => {               
+                   this.tasks.next(tasks);
+              });
+            // .pipe(
+            // tap(tasks => this.log(`fetched tasks`)),  
+            //   catchError(this.handleError('getTasks', []))
+            // ); 
+       
   	}
+
+    /** PUT: update the task on the server */
+    updateTask (task: Task, id)/*: Observable<any> */{
+      const url = `${this.mainUrl}/node/${id}`;        
+      return this.http.patch(url, task, httpHaljson)
+          .subscribe(resp => {
+            this.initializeTasks()
+          });
+        // .pipe(
+        //   tap(_ => this.log(`updated task id=${id}`)),
+        //   catchError(this.handleError<any>('updateTask'))
+        // );
+    }
 
 /** GET task by id. Will 404 if id not found */
 getTask(id: number): Observable<Task> {
@@ -82,26 +118,7 @@ addTask (task: Task): Observable<Task> {
     catchError(this.handleError<Task>('addtask'))
   );
 }
-    // {
-    //   "_links": {"type": {"href": "http://drupal.dd:8083/rest/type/node/task"}},
-    //   "nid": {"": {"value": "5"}},
-    //   "title": {"value": "Test Article 2"},  
-    //   "body": {"": {"value": "i am an update content"}} 
-    // }
-    /** PUT: update the task on the server */
-    updateTask (task: Task, id): Observable<any> {
-      // const id = typeof task === 'number' ? task : task.id;
-      
-      const url = `${this.mainUrl}/node/${id}`;      
-      
-      // console.log(JSON.stringify('id: ' + id));    
-      // console.log(JSON.stringify(task));    
 
-      return this.http.patch(url, task, httpHaljson).pipe(
-        tap(_ => this.log(`updated task id=${id}`)),
-        catchError(this.handleError<any>('updateTask'))
-      );
-    }
 
 
 /** DELETE: delete the task from the server */

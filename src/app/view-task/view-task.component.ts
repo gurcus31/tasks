@@ -1,7 +1,7 @@
 import { 
   Component, 
   OnInit, 
-  ChangeDetectorRef,
+  // ChangeDetectorRef,
   Input
    } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -28,8 +28,7 @@ export class ViewTaskComponent implements OnInit  {
 	constructor(
 	  private route: ActivatedRoute,
 	  private taskService: TaskService,
-	  private Ref: ChangeDetectorRef,
-    private NavigationComponent: NavigationComponent;
+	  // private Ref: ChangeDetectorRef,
     private location: Location
 	) {}
 
@@ -44,21 +43,17 @@ export class ViewTaskComponent implements OnInit  {
         params => {
           const id = +this.getId ();            
           this.taskService.newId(id)
-
              //console.log (id);
-
             this.taskService.getTask(id)
           .subscribe(Task => this.task = Task);
-
         }
     );
   }
-  goBack(): void {
-    this.location.back();
-  }
-
+  // goBack(): void {
+  //   this.location.back();
+  // }
   save(name: string, body:string): void {
-   	// let tasks: any = {_links: null}; tasks._links = {type: ...};
+     // let tasks: any = {_links: null}; tasks._links = {type: ...};
     let task: any = {
         _links: null,
         nid: null,
@@ -75,13 +70,9 @@ export class ViewTaskComponent implements OnInit  {
      // console.log(JSON.stringify(task.id));    
       
         this.taskService.updateTask(task, id)
-              .subscribe(
-                  // this.Ref.detach();
-                  // setInterval(() => {
-                  //   this.Ref.detectChanges();
-                  // }, 5000);
-                );
+
    }
+   
 
 
 }

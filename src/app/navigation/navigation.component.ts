@@ -1,8 +1,8 @@
 import { 
   Component, 
   OnInit, 
-  ChangeDetectorRef,
-  Input
+  // ChangeDetectorRef,
+  Input,
    } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
 import { Task } from '../task';
@@ -22,33 +22,31 @@ tasks: Task[];
 form: FormGroup;
 payLoad = '';
 urlId: number;
-
   constructor(
     private taskService: TaskService, 
     private route: ActivatedRoute, 
-    private cdRef: ChangeDetectorRef,
+    // private cdRef: ChangeDetectorRef,
     private router: Router
     ) { }
-
+  
   ngOnInit() {
     this.getTasks();
+
     }
+  
 
-  // ngAfterViewChecked() { 
-  //       this.cdRef.detectChanges();
-  // }   
-  	
+    getTasks(): void {  
+      // this.taskService.getTasks()
+      //   .subscribe(Tasks => this.tasks = Tasks);
+      // emits a next value.
+      this.taskService.getTasks()
+          .subscribe(tasks => this.tasks = tasks);
 
-    getTasks(): void {
-  		this.taskService.getTasks()
-  			.subscribe(Tasks => this.tasks = Tasks);
   	}  
-
 
     onSubmit(name: string, body:string): void {
     name = name.trim();
-    if (!name) { return; }
-    
+    if (!name) { return; }    
     let task: any = {
        _links: null,
        type: null,
