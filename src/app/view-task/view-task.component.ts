@@ -36,8 +36,6 @@ export class ViewTaskComponent implements OnInit  {
    this.viewTask();
 	}
     
-
-
   viewTask (): void {
         this.route.params.subscribe(
         params => {
@@ -60,7 +58,7 @@ export class ViewTaskComponent implements OnInit  {
         title: null,
         body: null     
      };
-     const id = +this.route.snapshot.paramMap.get('id')
+     const id = +this.getId ();
      task.nid = {"": id};
      const url = `${this.taskService.mainUrl}/rest/type/node/task`;
      task._links = {type: {"href":url}};

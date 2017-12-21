@@ -36,12 +36,8 @@ urlId: number;
   
 
     getTasks(): void {  
-      // this.taskService.getTasks()
-      //   .subscribe(Tasks => this.tasks = Tasks);
-      // emits a next value.
       this.taskService.getTasks()
-          .subscribe(tasks => this.tasks = tasks);
-
+        .subscribe(Tasks => this.tasks = Tasks);
   	}  
 
     onSubmit(name: string, body:string): void {

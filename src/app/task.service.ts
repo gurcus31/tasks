@@ -55,7 +55,6 @@ constructor(
       if (!this.taskList || this.taskList.length === 0) {
           this.initializeTasks();
       }
-
       return this.tasks.asObservable();
   }
 
@@ -68,12 +67,19 @@ constructor(
               });
             // .pipe(
             // tap(tasks => this.log(`fetched tasks`)),  
-            //   catchError(this.handleError('getTasks', []))
+            //   catchError(this.handleError('initializeTasks', []))
             // ); 
        
   	}
-
+//   getTasks(): Observable<Task[]> {
+//           const url = `${this.mainUrl}/tasks`;
+//         return this.http.get<Task[]>(url)
+//         .pipe(
+//         tap(tasks => this.log(`fetched tasks`)),    
+//           catchError(this.handleError('getTasks', []))
+//         ); 
     /** PUT: update the task on the server */
+
     updateTask (task: Task, id)/*: Observable<any> */{
       const url = `${this.mainUrl}/node/${id}`;        
       return this.http.patch(url, task, httpHaljson)
