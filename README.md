@@ -1,11 +1,17 @@
 # Angular + Drupal 8
 Review all the project in [Angular + Drupal 8](https://josuevalrob.com/angular-drupal8). 
 
-Run drupal and set up REST services. 
+Run drupal and Enable all the Services modules.
 
-Update your route in [task.services.ts](https://github.com/josuevalrob/tasks/blob/master/src/app/task.service.ts) 
+Also, download and enable the Rest-ui Module.
 
-`private mainUrl = 'http://drupal.dd:8083'`
+After that, enable the tasks features.  
+
+Remember to configure your services.yml in the drupal site. Inside drupal Feature you can see an example. 
+
+In the enviroment.ts file update the variables
+
+`mainUrl = 'http://drupal.dd:8083'`
 
 Also the header: 
 
@@ -17,6 +23,7 @@ Also the header:
   })
 };`
 
+If you go to production, change that variables from the enviroment.pro.ts
 
 # Task
 

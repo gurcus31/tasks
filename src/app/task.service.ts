@@ -11,23 +11,29 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { environment } from '../environments/environment';
 
 // The heroes web API expects a special header in HTTP save requests. 
 // That header is in the httpOption constant defined in the HeroService.
+//Get the token at https://example.com/rest/session/token
 
-const httpHaljson = {
-  headers: new HttpHeaders({ 
-  "X-CSRF-Token": "Qfnczb1SUnvOAsEy0A_xuGp_rkompgO2oTkCBOSEItM",
-  "Authorization": "Basic Qfnczb1SUnvOAsEy0A_xuGp_rkompgO2oTkCBOSEItM", // encoded user/pass - this is admin/123qwe
-  // "Content-Type": "application/json"
-  "Content-Type": "application/hal+json"
-  })
-};
+// const httpHaljson = {
+//   headers: new HttpHeaders({ 
+//   "X-CSRF-Token": "Qfnczb1SUnvOAsEy0A_xuGp_rkompgO2oTkCBOSEItM",
+//   "Authorization": "Basic Qfnczb1SUnvOAsEy0A_xuGp_rkompgO2oTkCBOSEItM", // encoded user/pass - this is admin/123qwe
+//   // "Content-Type": "application/json"
+//   "Content-Type": "application/hal+json"
+//   })
+// };
+
+const httpHaljson = environment.httpHaljson;
+
 
 @Injectable()
 export class TaskService {
-  public mainUrl = 'http://drupal.dd:8083'
-  
+  public mainUrl = environment.mainUrl;
+  // public mainUrl = 'http://drupal.dd:8083'
+
   private noId = new BehaviorSubject<number>(0);
   defaultId = this.noId.asObservable();
 
@@ -61,10 +67,15 @@ constructor(
 
   	initializeTasks(){
       const url = `${this.mainUrl}/tasks`;
-  	  return this.http.get<Task[]>(url)
-            .subscribe (tasks => {               
+  	        // console.log (url);       
+      const bla = this.http.get<Task[]>(url);
+      // console.log(JSON.stringify(bla));    
+
+      const blaa = bla.subscribe (tasks => {               
                    this.tasks.next(tasks);
               });
+      return blaa;
+
             // .pipe(
             // tap(tasks => this.log(`fetched tasks`)),  
             //   catchError(this.handleError('initializeTasks', []))
@@ -81,7 +92,8 @@ constructor(
     /** PUT: update the task on the server */
 
     updateTask (task: Task, id)/*: Observable<any> */{
-      const url = `${this.mainUrl}/node/${id}`;        
+      const url = `${this.mainUrl}/node/${id}`; 
+      console.log (url);       
       return this.http.patch(url, task, httpHaljson)
           .subscribe(resp => {
             this.initializeTasks()
@@ -95,6 +107,8 @@ constructor(
 /** GET task by id. Will 404 if id not found */
 getTask(id: number): Observable<Task> {
   const url = `${this.mainUrl}/tasks/${id}`;
+        console.log (url);       
+
   const returnGet = this.http.get<Task>(url);
   return returnGet
   .pipe(
@@ -116,6 +130,7 @@ getTask(id: number): Observable<Task> {
 addTask (task: Task): Observable<Task> {
   const url = `${this.mainUrl}/entity/node`;  
   // console.log(JSON.stringify(task));    
+  console.log (url);
   const postReturn = this.http.post(url, task, httpHaljson);
   // console.log(JSON.stringify(postReturn));  
   return postReturn 
@@ -131,6 +146,7 @@ addTask (task: Task): Observable<Task> {
 deleteTask (task: Task | number): Observable<Task> {
   const id = typeof task === 'number' ? task : task.id;
   const url = `${this.mainUrl}/node/${id}`;
+      console.log (url);       
 
   return this.http.delete<Task>(url, httpHaljson).pipe(
     tap(_ => this.log(`deleted task id=${id}`)),

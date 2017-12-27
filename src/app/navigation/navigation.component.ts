@@ -31,7 +31,6 @@ urlId: number;
   
   ngOnInit() {
     this.getTasks();
-
     }
   
 
@@ -55,7 +54,7 @@ urlId: number;
     task.type = {target_id: "task"};
     task.title = {value: name};
     task.body = { "": body};
-    // console.log(JSON.stringify(task));    
+    console.log(JSON.stringify(task));    
       this.taskService.addTask(task)
         .subscribe(task => {
           // console.log(JSON.stringify(this.tasks));
@@ -75,8 +74,7 @@ urlId: number;
             .subscribe(urlId => { 
               this.urlId = urlId ; 
                   if (oldId == urlId ) {
-                    // Location.call('/home');
-                    this.router.navigate(['/home']);
+                    this.router.navigate(['/']);
                   }  
             })
         })

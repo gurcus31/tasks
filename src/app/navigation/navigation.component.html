@@ -1,36 +1,45 @@
 <!-- Sidebar -->
 <div id="sidebar-wrapper">                
-    <div class="col-md-12 text-center">
-        <a routerLink="/home"><button type="button" class="btn btn-default btn-md">Go Home</button></a>
+    <div class="mx-auto text-center" style="width: 200px;">
+        <a routerLink="/">
+          <button type="button" class="btn btn-default btn-md">
+            <i class="fa fa-home" aria-hidden="true"></i>
+          </button>
+        </a>
     </div>
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <h5><a href="#">All the tasks</a></h5>
-            </li>
-            <li *ngFor="let task of tasks" class="d-inline-block col-md-12">
-                <a routerLink="/task/{{task.id}}" > {{task.title}}</a>
-                <!-- <span class="close big"></span> -->
-                <button class="close big" title="delete task"
-                (click)="delete(task)">x</button>
-            </li>
- 
-            <div class="container">
-                <h5>Add Task</h5>
-                <form (ngSubmit)="onSubmit(taskName.value, taskBody.value); taskName.value=''; taskBody.value=''" #taskForm="ngForm">
-                  <div class="form-group">
-                    <label for="name">Task Name</label>
-                           <input type="text" class="form-control" id="name"
-                             required name="name" #taskName>
-                             
-                  </div>
+    <div>
+      <ul class="sidebar-nav">
+          <li class="sidebar-brand">
+              <p> <strong><a href="#">All the tasks</a></strong></p> 
+          </li>
+          <li *ngFor="let task of tasks" class="d-inline-block col-md-12">
+              <a class="" routerLink="/task/{{task.id}}" > {{task.title}}</a>
+              <!-- <span class="close big"></span> -->
+              <button type="button" class=" close btn btn-danger btn-circle" title="delete task"
+              (click)="delete(task)">
+<!--               <i class="fa fa-times" aria-hidden="true"></i>
+ -->              </button>
+          </li>
+      
+          <div class="container">
+              <h5>Add Task</h5>
+              <form (ngSubmit)="onSubmit(taskName.value, taskBody.value); taskName.value=''; taskBody.value=''" #taskForm="ngForm">
                 <div class="form-group">
-                  <label for="body">What to do</label>
-                  <input type="text"  class="form-control" id="body" name="body" #taskBody>
+                  <label for="name">Task Name</label>
+                         <input type="text" class="form-control" id="name"
+                           required name="name" #taskName>
+                           
                 </div>
-                <button type="submit" class="btn btn-success">Submit</button>
+              <div class="form-group">
+                <label for="body">What to do</label>
+                <input type="text"  class="form-control" id="body" name="body" #taskBody>
+              </div>
+              <button type="submit" class="btn btn-success">Submit</button>
 
-            </form>
+          </form>
 
-            </div>
-        </ul>
+          </div>
+      </ul>      
+    </div>
+
 </div>
